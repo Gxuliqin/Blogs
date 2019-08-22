@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>登录页面</title>
+    <style>
+        #err{
+            font-size: 20px;
+            color: #d90009;
+        }
+
+
+    </style>
 </head>
 <body>
     <h1>Blogs!登录</h1>
-    <form method="POST" action="/admin/">
+    <p id="err">{{ error }}</p>
+    <form method="POST" action="/">
         <p>用户名：<input type="text"  name ="adminid"  /></p>
         <p>密码：<input  type="password" name="adminpwd" /></p>
         <input type="submit" value="登录"/>
+        没有账号？<a href="/regist/" target="_blank" >注册</a>
 
         <p>点击进入子页面</p>
         <a href="/admin/" >admin </a>

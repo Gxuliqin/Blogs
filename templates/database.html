@@ -14,7 +14,7 @@
 <body>
     <h1 style="font-size: 15px; color:#0b46ff">
         <
-        本地数据库
+        blogs主页
         >
     </h1>
     <h1>发帖列表</h1>
@@ -36,13 +36,13 @@
     {% for row in content %}
 
         <p id="content">{{ row }}</p>
-    {% endfor %}
+
 {#    <p><a id="good">点赞&nbsp;</a><a>评论&nbsp;</a><a>转发</a></p>#}
     <button onclick="add_goods()"><span id="goods">点赞</span></button>
     <button onclick="distribute()"><span id="distribute">转发</span></button>
     <button onclick="talkabout()"><span id="issiue">评论</span></button>
 
-
+    {% endfor %}
     <script>
         var a = 0;
         var b = 0;

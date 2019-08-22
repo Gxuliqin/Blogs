@@ -6,10 +6,23 @@ import pymysql
 from  util import sqlheper
 
 def first(request):
-    return render(request, 'first.html')
+    adminid = request.POST.get('adminid')
+    pwd = request.POST.get('adminpwd')
+    print("adminid:",adminid,pwd)
+    if adminid==None or pwd==None:
+
+        return render(request, 'first.html', {"error": "请输入用户名和密码登录"})
+
+    name = sqlheper.get_list("select name from user where name=%s",[adminid,])
+    pd = sqlheper.get_list("select pwd from user where pwd=%s",[pwd,])
+    print(len(name),pd)
+    if len(name)!=0 and len(pd)!=0:
+        return render(request, 'adminok.html')
+    else:
+        return render(request, 'first.html', {"error": "用户名或密码错误"})
 
 def admin(request):
-    return render(request, 'admin.html')
+    return render(request, 'adminok.html')
 
 def database(request):
 
@@ -136,3 +149,16 @@ def add_content(request):
             return redirect("/database/")
         else:
             return render(request, 'add_content.html', {'msg': '请正确输入'})
+
+def regist(requset):
+    adminid = requset.POST.get('adminid')
+    pwd = requset.POST.get('adminpwd')
+    if adminid!=None and pwd!=None:
+        adm = sqlheper.get_list("select name from user where name=%s",[adminid,])
+        if len(adm)==0:
+            sqlheper.modify("insert into user(name,pwd) values(%s,%s)",[adminid,pwd])
+            return render(requset, 'registerok.html')
+        else:
+            return render(requset, 'regist.html',{"err": "用户名已存在"})
+    else:
+        return render(requset, 'regist.html',{"err": "用户名或密码不能为空"})
