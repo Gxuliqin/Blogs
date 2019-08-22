@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库</title>
+    <style>
+     #opencv1{
+         font-size: 15px;
+         border: black;
+     }
+
+    </style>
+</head>
+<body>
+    <h1 style="font-size: 15px; color:#0b46ff">
+        <
+        本地数据库
+        >
+    </h1>
+    <h1>帖子列表</h1>
+    <div>
+        <a href="/">首页</a>
+        <a href="/add_class/">发布</a>
+
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户</th>
+                <th>发帖日期</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for row in class_list %}
+
+                <tr>
+                    <td>{{ row.id}}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.number }}</td>
+                    <td><a href="/del_class/?nid={{ row.id }}">删除</a>
+                   |
+                    <a href="/edit_class/?nid={{ row.id }}">编辑</a></td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    <p id="opencv1" >OpenCV是一个基于BSD许可（开源）发行的跨平台计算机视觉库，
+                    可以运行在Linux、Windows、Android和Mac OS操作系统上。
+                    它轻量级而且高效——由一系列 C 函数和少量 C++ 类构成，同时提供了Python、Ruby、MATLAB等语言的接口，
+                    实现了图像处理和计算机视觉方面的很多通用算法.</p>
+{#    <p><a id="good">点赞&nbsp;</a><a>评论&nbsp;</a><a>转发</a></p>#}
+    <button onclick="add_goods()"><span id="goods">点赞</span></button>
+    <button onclick="distribute()"><span id="distribute">转发:</span></button>
+    <button onclick="talkabout()"><span id="issiue">评论:</span></button>
+
+
+    <script>
+        var a = 0;
+        var b = 0;
+        var c = 0;
+        function add_goods(){
+            a++;
+         document.getElementById("goods").innerHTML = "点赞："+a;
+
+        }
+        function distribute(){
+            b++;
+            document.getElementById("distribute").innerHTML ="转发："+ b;
+        }
+        function talkabout() {
+            c++;
+            document.getElementById("issiue").innerHTML = "评论："+c;
+        }
+
+
+    </script>
+    <p><a href="/students/" >编辑学生</a></p>
+    <br>
+    <br>
+</body>
+</html>
+

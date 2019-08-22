@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>编辑班级</h1>
+    <form method="POST" action="/database/">
+        <input type="text" name="id" style="display: none"  value="{{ result.id }}" />
+        <p>班级名称:<input type="text" name="name" value="{{ result.name }}"/></p>
+        <p>学号:<input type="text" name="number" value="{{ result.number }}" /></p>
+        <input type="submit" value="提交"/>
+
+    </form>
+
+</body>
+</html>

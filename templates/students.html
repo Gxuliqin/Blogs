@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>欢迎来到学生编辑页面</h1>
+<h1>学生列表</h1>
+    <div>
+        <a>添加</a>
+        <a href="/">首页</a>
+        |
+        <a href="/database/">数据库</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>学生姓名</th>
+                <th>学生所属班级</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for row in student_list %}
+
+                <tr>
+                    <td>{{ row.id}}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.number }}</td>
+                    <td><a href="/del_class/?nid={{ row.id }}">删除</a>
+                   |
+                    <a href="/edit_class/?nid={{ row.id }}">编辑</a></td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
