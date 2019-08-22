@@ -14,46 +14,13 @@ def admin(request):
 def database(request):
 
     if request.method == 'POST':
-        nid = request.POST.get('id')
-        nam = request.POST.get('name')
-        num = request.POST.get('number')
-
-        conn = pymysql.connect(host='127.0.0.1', port=3306, user='liqin', passwd='1234', db='S4DB65')
-
-        cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-
-        effect_row = cursor.execute("update  student set name=%s, number=%s where id =%s",[nam,num, nid,])
-        # effect_row = cursor.execute("update  student set number=%s where id =%s",[num, nid,])
-
-        result = cursor.fetchall()
-
-        conn.commit()
-
-        cursor.close()
-
-        conn.close()
-        print(nid)
-
-
-    conn = pymysql.connect(host='127.0.0.1', port=3306, user='liqin', passwd='1234', db='S4DB65')
-
-        #创建游标
-    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-
-        #执行SQL,并返回受影响行数
-    row = cursor.execute("select * from  student")
-        # effect_row = cursor.execute("update hosts set host = '1.1.1.2' where nid > %s", (1,))
-
-    class_list = cursor.fetchall()
-
-        #提交,不然无法保存新建或修改的数据
-    conn.commit()
-
-    cursor.close()
-
-    conn.close()
-
-    return render(request, 'database.html', {'class_list': class_list})
+        id = request.POST.get('id')
+        # nam = request.POST.get('n')
+        con = request.POST.get('content')
+        sqlheper.modify("insert into user(content) values(%s)",[con,])
+    content = sqlheper.get_list("select content from user",[])
+    name = sqlheper.get_list("select name from user ",[])
+    return render(request, 'database.html', {'content': content, 'name': name})
     # return redirect('/admin/')
 
 
@@ -62,7 +29,7 @@ def add_class(request):
     if request.method =="GET":
 
 
-        return render(request, 'add_class.html')
+        return render(request, 'add_content.html')
     # pass
 
     else:
@@ -86,7 +53,7 @@ def add_class(request):
 
             return redirect("/database/")
         else:
-            return render(request, 'add_class.html' ,{'msg':'请正确输入'})
+            return render(request, 'add_content.html', {'msg': '请正确输入'})
 
 
 
@@ -148,3 +115,24 @@ def students(request):
 
 
     return  render(request, 'students.html', {'student_list':result})
+
+
+def add_content(request):
+
+    if request.method =="GET":
+
+
+        return render(request, 'add_content.html')
+    # pass
+
+    else:
+
+        v = request.POST.get('id')
+        v2 = request.POST.get('content')
+
+        if len(v)>0 and len(v2)>0:
+
+            sqlheper.modify("insert into user(content) values(%s)",[v2,])
+            return redirect("/database/")
+        else:
+            return render(request, 'add_content.html', {'msg': '请正确输入'})
