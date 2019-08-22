@@ -19,29 +19,30 @@
     </h1>
     <h1>发帖列表</h1>
     <div>
-        <a href="/">首页</a>
-        <a href="/add_class/">发布</a>
+        <a href="/">登录页</a>
+        |
+        <a href="/edit_class/">发布</a>
 
     </div>
     <table>
         <tbody>
             <p>{{ name }}发布于<span>date</span> &nbsp;&nbsp;
-                    <a href="/del_class/?nid={{ row.id }}">删除</a>
-                   |
-                    <a href="/edit_class/?nid={{ row.id }}">编辑</a>
+
             </p>
 
         </tbody>
     </table>
     {% for row in content %}
 
-        <p id="content">{{ row }}</p>
+        <p id="content">{{ row.content }}</p>
 
 {#    <p><a id="good">点赞&nbsp;</a><a>评论&nbsp;</a><a>转发</a></p>#}
     <button onclick="add_goods()"><span id="goods">点赞</span></button>
     <button onclick="distribute()"><span id="distribute">转发</span></button>
     <button onclick="talkabout()"><span id="issiue">评论</span></button>
-
+        <a href="/del_class/?nid={{ row.id }}">删除</a>
+        |
+        <a href="/edit_class/?nid={{ row.id }}">编辑</a>
     {% endfor %}
     <script>
         var a = 0;
