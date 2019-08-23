@@ -27,6 +27,7 @@
         <
         <span id="date" ></span>
         >
+        <a href="/">退出</a>
     </h1>
     <script>
      document.getElementById('date').innerHTML = Date();
@@ -46,7 +47,7 @@
     </table>
     {% for row in content %}
         {% if row.content|length > 1 %}
-        <p id="username">{{ row.name }}发布于<span>{{ row.date }}</span> &nbsp;&nbsp; </p>
+            <p id="username"><span style="color: #0d82ff" >{{ row.name }}</span> >发布于<u>{{ row.date }}</u> &nbsp;&nbsp; </p>
 
         <p id="content">{{ row.content }}</p>
 
@@ -54,30 +55,38 @@
 {#    <button onclick="add_goods()"><span id="goods" + {{ row.id }}>点赞</span></button>#}
     <button onclick="distribute()"><span id="distribute">转发</span></button>
     <button onclick="ck()">评论</button>
-        <p class="talk" id="issiue"></p>
+
         <a href="/del_class/?nid={{ row.id }}">删除</a>
         |
         <a href="/edit_class/?nid={{ row.id }}">编辑</a>
+            <p class="talk" id="issiue0"></p>
+            <p class="talk" id="issiue1"></p>
+            <p class="talk" id="issiue2"></p>
+            <p class="talk" id="issiue3"></p>
+            <p class="talk" id="issiue4"></p>
+            <p class="talk" id="issiue5"></p>
         <br>
         <br>
+
         {% endif %}
     {% endfor %}
     <script>
         var a = 0;
         var b = 0;
         var c = 0;
-        function add_goods(){
-            a++;
-         document.getElementById("goods").innerHTML = "点赞("+a+")";
-
-        }
+        {#function add_goods(){#}
+        {#    a++;#}
+        {# document.getElementById().innerHTML = "点赞("+a+")";#}
+        {##}
+        {#}#}
         function distribute(){
             b++;
             document.getElementById("distribute").innerHTML ="转发("+ b+")";
         }
-       var ck = function(  ){
+       var ck = function(){
+            c++;
             var x = prompt ("输入评论: ","");/*第一个变量为提示语，第二个变量为默认初始值*/
-            document.getElementById('issiue').innerHTML= ":"+x;
+            document.getElementById('issiue'+c).innerHTML= "{{ user.0.name }}"+":"+x;
         }
 
 

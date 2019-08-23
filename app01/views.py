@@ -6,7 +6,7 @@ import pymysql
 from  util import sqlheper
 
 import cv2
-import time
+import datetime
 
 def first(request):
     if request.method =='POST':
@@ -19,12 +19,18 @@ def first(request):
 
         name_dic = sqlheper.get_one("select name from user where name=%s",[adminid,])
         pd_dic = sqlheper.get_list("select pwd from user where pwd=%s",[pwd,])
-        # print(name_dic,pd_dic)
-        if name_dic!=None and pd_dic!=None:
+        # print(len(name_dic),len(pd_dic))
+
+        if name_dic==None or pd_dic==None:
+            return render(request, 'first.html', {"error": "用户名不存在"})
+
+        if len(name_dic)!=0 and len(pd_dic)!=0:
 
             nid = sqlheper.get_one("select id from user where name=%s",[name_dic['name'],])
             # nid=None
             # print(nid)
+            if nid==None:
+                return render(request, 'first.html', {"error": "用户名或密码错误"})
 
             ####进入主站入口
             return render(request, 'adminok.html',{"id":nid['id'] ,"name":name_dic})
@@ -36,15 +42,15 @@ def first(request):
 def admin(request):
     # sqlheper.get_list()
     id = request.POST.get('id')
-    cap = cv2.VideoCapture(0)
-    suc,img = cap.read()
+    # cap = cv2.VideoCapture(0)
+    # suc,img = cap.read()
     path = None
     # if suc:
     user = sqlheper.get_list("select * from user where id=%s",[id,])
-    t = time.time()
-    path ="/image/"+str(t)+".jpg"
+
+    # path ="/image/"+str(t)+".jpg"
     # cv2.imwrite("."+path, img)
-    cap.release()
+    # cap.release()
     # cv2.imshow("asd",img)
     # cv2.waitKey(0)
     return render(request, 'adminok.html', {"img": path, "user":user})
@@ -57,18 +63,22 @@ def database(request):
         con = request.POST.get('content')
         # date = request.POST.get('date')
         sqlheper.modify("update user set content=%s where id=%s",[con,nid,])
+        string = '2014-01-08 11:59:58'
+        t= datetime.datetime.strptime(string,'%Y-%m-%d %H:%M:%S')
+        sqlheper.modify("update user set date=%s where id=%s",[t,nid,])
         # sqlheper.modify("update user set date=%s where id=%s",[date,nid,])
     if request.method == 'GET':
         nid = request.GET.get('nid')
     if nid ==None or len(nid)==0:
         print(nid)
         return redirect("/")
-    content = sqlheper.get_list("select content from user",[])
-    print(content)
-    name = sqlheper.get_list("select name from user where id=%s",[nid,])
+    content = sqlheper.get_list("select * from user",[])
+    # print(content)
+    name = sqlheper.get_list("select * from user where id=%s",[nid,])
     # if content==None:
     #     return render(request, 'database.html', {'user': name, 'nid': nid})
     # else:
+    print(name)
     return render(request, 'database.html', {'content': content, 'user': name, 'nid': nid})
     # return redirect('/admin/')
 
@@ -110,6 +120,8 @@ def add_class(request):
 def del_class(requst):
 
     nid = requst.GET.get('nid')
+    nid2 = requst.GET.get('nid2')
+    print(nid2)
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='liqin', passwd='1234', db='S4DB65')
 
     # 创建游标
@@ -117,7 +129,7 @@ def del_class(requst):
 
     # 执行SQL,并返回受影响行数
     print(nid)
-    effect_row = cursor.execute("update user set content=%s where id=%s", ["NULL",nid, ])
+    effect_row = cursor.execute("update user set content=%s where id=%s", ["",nid, ])
     # effect_row = cursor.execute("update hosts set host = '1.1.1.2' where nid > %s", (1,))
 
     # class_list = cursor.fetchall()
