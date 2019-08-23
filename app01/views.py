@@ -17,14 +17,17 @@ def first(request):
 
             return render(request, 'first.html', {"error": "请输入用户名和密码登录"})
 
-        name = sqlheper.get_list("select name from user where name=%s",[adminid,])
-        pd = sqlheper.get_list("select pwd from user where pwd=%s",[pwd,])
-        # print(len(name),pd)
-        if len(name)!=0 and len(pd)!=0:
-            # nid = sqlheper.get_one("select id from user where name=%s",[name,])
-            nid=None
+        name_dic = sqlheper.get_one("select name from user where name=%s",[adminid,])
+        pd_dic = sqlheper.get_list("select pwd from user where pwd=%s",[pwd,])
+        # print(name_dic,pd_dic)
+        if name_dic!=None and pd_dic!=None:
 
-            return render(request, 'adminok.html',{"id":nid ,"name":name})
+            nid = sqlheper.get_one("select id from user where name=%s",[name_dic['name'],])
+            # nid=None
+            # print(nid)
+
+            ####进入主站入口
+            return render(request, 'adminok.html',{"id":nid['id'] ,"name":name_dic})
         else:
             return render(request, 'first.html', {"error": "用户名或密码错误"})
     else:
@@ -32,28 +35,41 @@ def first(request):
 
 def admin(request):
     # sqlheper.get_list()
+    id = request.POST.get('id')
     cap = cv2.VideoCapture(0)
     suc,img = cap.read()
     path = None
     # if suc:
+    user = sqlheper.get_list("select * from user where id=%s",[id,])
     t = time.time()
     path ="/image/"+str(t)+".jpg"
     # cv2.imwrite("."+path, img)
     cap.release()
     # cv2.imshow("asd",img)
     # cv2.waitKey(0)
-    return render(request, 'adminok.html', {"img": path})
+    return render(request, 'adminok.html', {"img": path, "user":user})
 
 def database(request):
 
     if request.method == 'POST':
-        id = request.POST.get('id')
+        nid = request.POST.get('nid')
         # nam = request.POST.get('n')
         con = request.POST.get('content')
-        sqlheper.modify("update user set content=%s where id=%s",[con,id,])
+        # date = request.POST.get('date')
+        sqlheper.modify("update user set content=%s where id=%s",[con,nid,])
+        # sqlheper.modify("update user set date=%s where id=%s",[date,nid,])
+    if request.method == 'GET':
+        nid = request.GET.get('nid')
+    if nid ==None or len(nid)==0:
+        print(nid)
+        return redirect("/")
     content = sqlheper.get_list("select content from user",[])
-    name = sqlheper.get_list("select name from user ",[])
-    return render(request, 'database.html', {'content': content, 'name': name})
+    print(content)
+    name = sqlheper.get_list("select name from user where id=%s",[nid,])
+    # if content==None:
+    #     return render(request, 'database.html', {'user': name, 'nid': nid})
+    # else:
+    return render(request, 'database.html', {'content': content, 'user': name, 'nid': nid})
     # return redirect('/admin/')
 
 
@@ -101,7 +117,7 @@ def del_class(requst):
 
     # 执行SQL,并返回受影响行数
     print(nid)
-    effect_row = cursor.execute("delete from student where id=%s", [nid, ])
+    effect_row = cursor.execute("update user set content=%s where id=%s", ["NULL",nid, ])
     # effect_row = cursor.execute("update hosts set host = '1.1.1.2' where nid > %s", (1,))
 
     # class_list = cursor.fetchall()
@@ -113,7 +129,7 @@ def del_class(requst):
 
     conn.close()
 
-    return redirect("/database/")
+    return render(requst,"/database/?nid=%s" % nid)
 
 def edit_class(request):
     nid = request.GET.get('nid')
@@ -123,7 +139,7 @@ def edit_class(request):
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
     # 执行SQL,并返回受影响行数
-    effect_row = cursor.execute("select * from student where id = %s", [nid, ])
+    effect_row = cursor.execute("select * from user where id = %s", [nid, ])
     # effect_row = cursor.execute("update hosts set host = '1.1.1.2' where nid > %s", (1,))
 
     result = cursor.fetchone()
@@ -135,7 +151,7 @@ def edit_class(request):
 
     conn.close()
 
-    return render(request , 'edit_class.html' ,{'result':result})
+    return render(request , 'edit_class.html' ,{'result':result,'nid':nid})
 
 def students(request):
     """
@@ -153,22 +169,25 @@ def students(request):
 def add_content(request):
 
     if request.method =="GET":
+        nid = request.GET.get('nid')
+    else:
+        nid = request.POST.get('nid')
+    # result = sqlheper.get_one("select ")
 
-
-        return render(request, 'add_content.html')
+    return render(request, 'add_content.html',{'nid':nid})
     # pass
 
-    else:
-
-        v = request.POST.get('id')
-        v2 = request.POST.get('content')
-
-        if len(v)>0 and len(v2)>0:
-
-            sqlheper.modify("insert into user(content) values(%s)",[v2,])
-            return redirect("/database/")
-        else:
-            return render(request, 'add_content.html', {'msg': '请正确输入'})
+    # else:
+    #
+    #     v = request.POST.get('id')
+    #     v2 = request.POST.get('content')
+    #
+    #     if len(v)>0 and len(v2)>0:
+    #
+    #         sqlheper.modify("insert into user(content) values(%s)",[v2,])
+    #         return redirect("/database/")
+    #     else:
+    #         return render(request, 'add_content.html', {'msg': '请正确输入'})
 
 def regist(requset):
     if requset.method =='POST':

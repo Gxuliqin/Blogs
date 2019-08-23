@@ -8,6 +8,11 @@
          font-size: 15px;
          border: black;
      }
+        .talk{
+            font-size: 15px;
+            font-family: "宋体";
+            color: #0b46ff;
+        }
 
     </style>
 </head>
@@ -16,33 +21,46 @@
         <
         blogs主页
         >
+        <
+        当前用户：{{ user.0.name }}
+        >
+        <
+        <span id="date" ></span>
+        >
     </h1>
+    <script>
+     document.getElementById('date').innerHTML = Date();
+    </script>
     <h1>发帖列表</h1>
     <div>
         <a href="/">登录页</a>
         |
-        <a href="/edit_class/">发布</a>
+        <a href="/add_content/?nid={{ nid }}">发布</a>
 
     </div>
     <table>
         <tbody>
-            <p>{{ name }}发布于<span>date</span> &nbsp;&nbsp;
 
-            </p>
 
         </tbody>
     </table>
     {% for row in content %}
+        {% if row.content|length > 1 %}
+        <p id="username">{{ row.name }}发布于<span>{{ row.date }}</span> &nbsp;&nbsp; </p>
 
         <p id="content">{{ row.content }}</p>
 
 {#    <p><a id="good">点赞&nbsp;</a><a>评论&nbsp;</a><a>转发</a></p>#}
-    <button onclick="add_goods()"><span id="goods">点赞</span></button>
+{#    <button onclick="add_goods()"><span id="goods" + {{ row.id }}>点赞</span></button>#}
     <button onclick="distribute()"><span id="distribute">转发</span></button>
-    <button onclick="talkabout()"><span id="issiue">评论</span></button>
+    <button onclick="ck()">评论</button>
+        <p class="talk" id="issiue"></p>
         <a href="/del_class/?nid={{ row.id }}">删除</a>
         |
         <a href="/edit_class/?nid={{ row.id }}">编辑</a>
+        <br>
+        <br>
+        {% endif %}
     {% endfor %}
     <script>
         var a = 0;
@@ -57,9 +75,9 @@
             b++;
             document.getElementById("distribute").innerHTML ="转发("+ b+")";
         }
-        function talkabout() {
-            c++;
-            document.getElementById("issiue").innerHTML = "评论("+c+")";
+       var ck = function(  ){
+            var x = prompt ("输入评论: ","");/*第一个变量为提示语，第二个变量为默认初始值*/
+            document.getElementById('issiue').innerHTML= ":"+x;
         }
 
 

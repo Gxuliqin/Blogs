@@ -10,13 +10,19 @@
 </head>
 <body>
     <h1>发布话题</h1>
-    <form method="POST" action="/database/">
-        <input type="text" name="id" style="display: none"  value="{{ result.id }}" />
+    <form method="POST" action="/database/?nid={{ nid }}">
+        <input type="text" name="nid" style="display: none"  value="{{ result.id }}" />
 {#        <p>班级名称:<input type="text" name="name" width="200" height="200" value="{{ result.name }}"/></p>#}
 {#        <p>学号:<input type="text" name="number" value="{{ result.number }}" /></p>#}
 
     <textarea name="content" rows="10" cols="80" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">输入内容...</textarea>
     <br>
+        <p id="date" style="display: none"></p>
+        <script>
+            function date() {
+                return document.getElementById("date").innerHTML=Date()
+            }
+        </script>
         <input type="submit" value="发布"/>
     </form>
 

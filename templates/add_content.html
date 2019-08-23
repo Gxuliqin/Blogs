@@ -2,42 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>添加数据</title>
+    <title>Title</title>
     <style>
-        span{
-            color: #d90009;
-            font-size: 50px;
-        }
-        
+
+
     </style>
 </head>
 <body>
-    <h1><span>{{ msg }}</span></h1>
-    <h1>添加班级</h1>
-    <form method="POST" action="/add_class/">
-        <p>班级名称:<input type="text"  name="name"/></p>
-        <p>学号:<input type="text" name="number"/></p>
-        <p>
-            年级:
-            <select name="class_id">
-                <option value="1">一年级</option>
-                <option>二年级</option>
-                <option>三年级</option>
-                <option>四年级</option>
-                <option>五年级</option>
+    <h1>发布话题</h1>
+    <form method="POST" action="/database/?nid={{ nid }}">
+        <input type="text" name="nid" style="display: none"  value="{{ nid }}" />
+{#        <p>班级名称:<input type="text" name="name" width="200" height="200" value="{{ result.name }}"/></p>#}
+{#        <p>学号:<input type="text" name="number" value="{{ result.number }}" /></p>#}
 
-            </select>
-        </p>
-        <input type="submit" value="提交"/>
-        <br>
-        <br>
-        <a>回到<a href="/">首页</a>
-            |
-            <a href="/database/">数据库</a>
+    <textarea name="content" rows="10" cols="80" onpropertychange="if(this.scrollHeight>80) this.style.posHeight=this.scrollHeight+5">输入内容...</textarea>
+    <br>
+{#       <input type="text"  name="date" style="display: none" />#}
 
-            </p>
-
+        <input type="submit" value="发布"/>
     </form>
+
+    <p>返回<a href="/database/">主页</a></p>
 
 </body>
 </html>

@@ -22,7 +22,7 @@ urlpatterns = [
 
     url(r'admin/', views.admin),
     url(r'database/', views.database),
-    url(r'add_class/', views.add_content),
+    url(r'add_content/', views.add_content),
     url(r'del_class/', views.del_class),
     url(r'edit_class/', views.edit_class),
     url(r'students/', views.students),
