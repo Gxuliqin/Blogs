@@ -11,7 +11,7 @@ JS
 developed for excercise!
 
 #before runing this code !
-use mysql to create a databse named "S4DB65" admin"liqin" pwd"1234"
+use mysql to create a databse named "S4DB65" admin"liqin" pwd"1234" on your localhost!
 
 
 #v1.0
