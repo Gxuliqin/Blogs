@@ -6,7 +6,7 @@ import pymysql
 from  util import sqlheper
 
 import cv2
-import datetime
+import time
 
 def first(request):
     if request.method =='POST':
@@ -58,19 +58,39 @@ def admin(request):
 def database(request):
 
     if request.method == 'POST':
+        talk = request.POST.get('talkabout')
         nid = request.POST.get('nid')
+        id = request.POST.get('nameid')
+        if talk!=None and talk!='null':
+            print("post ok")
+            print(talk)
+            print(id)
+            print(nid)
+
+            name = sqlheper.get_one("select name from user where id=%s", [id, ])
+
+            nnane = sqlheper.get_one("select name from user where id=%s",[nid,])
+
+            # if nnane==None:
+            #     sqlheper.modify("insert into talkabout(name) values(%s)", [nnane,])
+
+            # sqlheper.modify("alter table talkabout add %s varchar(500)",[ta,])
+            sqlheper.modify("insert into talkabout(nname, name, content1) values(%s, %s, %s)", [nnane['name'], name['name'], talk,])
+
+
         # nam = request.POST.get('n')
         con = request.POST.get('content')
         # date = request.POST.get('date')
         sqlheper.modify("update user set content=%s where id=%s",[con,nid,])
-        string = '2014-01-08 11:59:58'
-        t= datetime.datetime.strptime(string,'%Y-%m-%d %H:%M:%S')
+        # string = '2014-01-08 11:59:58'
+        # t= datetime.datetime.strptime(string,'%Y-%m-%d %H:%M:%S')
+        t = time.asctime( time.localtime(time.time()) )
         sqlheper.modify("update user set date=%s where id=%s",[t,nid,])
         # sqlheper.modify("update user set date=%s where id=%s",[date,nid,])
     if request.method == 'GET':
         nid = request.GET.get('nid')
     if nid ==None or len(nid)==0:
-        print(nid)
+        # print(nid)
         return redirect("/")
     content = sqlheper.get_list("select * from user",[])
     # print(content)
@@ -78,8 +98,12 @@ def database(request):
     # if content==None:
     #     return render(request, 'database.html', {'user': name, 'nid': nid})
     # else:
-    print(name)
-    return render(request, 'database.html', {'content': content, 'user': name, 'nid': nid})
+    # print(name)
+    talkabout = sqlheper.get_list("select * from talkabout",[])
+    # print(talkabout)
+
+
+    return render(request, 'database.html', {'content': content, 'user': name, 'nid': nid, 'talk':talkabout})
     # return redirect('/admin/')
 
 
@@ -118,31 +142,15 @@ def add_class(request):
 
 
 def del_class(requst):
+    nid = requst.POST.get('nid')
+    id = requst.POST.get('targetid')
+    if nid==id and nid!=None:
+        name = sqlheper.get_one("select name from user where id=%s", [id,])
+        sqlheper.modify("delete from talkabout where name=%s",[name['name'],])
+        sqlheper.modify("update user set content='' where id=%s", [id,])
+    print("del", nid,id)
 
-    nid = requst.GET.get('nid')
-    nid2 = requst.GET.get('nid2')
-    print(nid2)
-    conn = pymysql.connect(host='127.0.0.1', port=3306, user='liqin', passwd='1234', db='S4DB65')
-
-    # 创建游标
-    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-
-    # 执行SQL,并返回受影响行数
-    print(nid)
-    effect_row = cursor.execute("update user set content=%s where id=%s", ["",nid, ])
-    # effect_row = cursor.execute("update hosts set host = '1.1.1.2' where nid > %s", (1,))
-
-    # class_list = cursor.fetchall()
-
-    # 提交,不然无法保存新建或修改的数据
-    conn.commit()
-
-    cursor.close()
-
-    conn.close()
-
-    return render(requst,"/database/?nid=%s" % nid)
-
+    return redirect('/database/?nid=%s',nid)
 def edit_class(request):
     nid = request.GET.get('nid')
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='liqin', passwd='1234', db='S4DB65')

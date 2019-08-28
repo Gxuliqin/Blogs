@@ -13,7 +13,16 @@
             font-family: "宋体";
             color: #0b46ff;
         }
-
+        #content{
+            position:relative;
+            width: 600px;
+            border-width: 1px;
+            border-style:solid;
+            border-color: black;
+            {#margin:auto;#}
+            {#display:inline-block;#}
+            {#background-color: white;#}
+        }
     </style>
 </head>
 <body>
@@ -39,54 +48,151 @@
         <a href="/add_content/?nid={{ nid }}">发布</a>
 
     </div>
+
     <table>
         <tbody>
 
 
         </tbody>
     </table>
+    <div id="data-maindata" style="background-color: #f0fff4" >
     {% for row in content %}
         {% if row.content|length > 1 %}
+
             <p id="username"><span style="color: #0d82ff" >{{ row.name }}</span> >发布于<u>{{ row.date }}</u> &nbsp;&nbsp; </p>
+{#            <div id="data-content" style="background-color: #dbe6e0">#}
+            <p id="content"  >{{ row.content }}</p>
+{#            </div>#}
+{#           <p><a id="good">点赞&nbsp;</a><a>评论&nbsp;</a><a>转发</a></p>#}
+{#          <button onclick="add_goods()"><span id="goods" + {{ row.id }}>点赞</span></button>#}
+            <button onclick="distribut({{ row.id }})"><span id="distribute{{ row.id }}">转发</span></button>
+            <button onclick="ckn({{ row.id }})"><span id="talk{{ row.id }}">评论</span></button>
+{#            <input type="button" onclick="ck({{ row.id }})" value="评论" />#}
+{#          <button onclick="ck()">评论</button>#}
 
-        <p id="content">{{ row.content }}</p>
+                <input type="button" onclick="del({{ row.id }})" value="删除">
+                |
+                <input type="button" onclick="edi({{ row.id }})" value="编辑" />
 
-{#    <p><a id="good">点赞&nbsp;</a><a>评论&nbsp;</a><a>转发</a></p>#}
-{#    <button onclick="add_goods()"><span id="goods" + {{ row.id }}>点赞</span></button>#}
-    <button onclick="distribute()"><span id="distribute">转发</span></button>
-    <button onclick="ck()">评论</button>
+            <div id="talkarea">
 
-        <a href="/del_class/?nid={{ row.id }}">删除</a>
-        |
-        <a href="/edit_class/?nid={{ row.id }}">编辑</a>
-            <p class="talk" id="issiue0"></p>
-            <p class="talk" id="issiue1"></p>
-            <p class="talk" id="issiue2"></p>
-            <p class="talk" id="issiue3"></p>
-            <p class="talk" id="issiue4"></p>
-            <p class="talk" id="issiue5"></p>
-        <br>
-        <br>
+                {% for tal in talk %}
+                    {% if tal.name == row.name %}
+
+                    <p class="talk">{{ tal.nname }}:{{ tal.content1 }}</p>
+                    {% endif %}
+            {% endfor %}
+                <p class="talk" id="issiue{{ row.id}}"></p>
+                {% for tak in talk %}
+                <p class="talk" id="issiue{{ tak.id}}"></p>
+                {% endfor %}
+
+                <div style="background-color: white"> <p> &nbsp;</p>
+                </div>
+            </div>
 
         {% endif %}
     {% endfor %}
+    </div>
+
     <script>
+         var b = 0;
+         var c=0;
+         function distribut(m){
+            b++;
+            document.getElementById("distribute"+m).innerHTML ="转发("+ b+")";
+        }
+
+        var ckn = function(qwe) {
+            c++;
+            var x = prompt("输入评论: ", "");/*第一个变量为提示语，第二个变量为默认初始值*/
+            if (x !=null)
+            {
+                document.getElementById('issiue' + qwe).innerHTML = "{{ user.0.name }}" + ":" + x;
+            };
+            var _form = new FormData();
+            _form.append("talkabout", x);
+            _form.append("nameid", qwe);
+            _form.append("nid", {{ nid }});
+            {#_form.append("talkabout", x);#}
+            {#var _form1 = new FormData();#}
+            {#_form1.append("nameid", {{ row.id }});#}
+            {#var _form2 = new FormData();#}
+            {#_form2.append("nid", {{ nid }});#}
+            {#_form.append("nameid", qwe);#}
+            {#_form.append("nid", nid);#}
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/del_class/", true);
+            xhr.send(_form);
+            {#xhr.send(_form2);#}
+        }
+
+        function del(m) {
+            var form = new FormData();
+            form.append("targetid", m);
+            form.append("nid",{{ nid }});
+
+            var xh = new XMLHttpRequest();
+            xh.open("POST","/del_class/", true);
+            xh.send(form);
+            if (m=={{ nid }}){
+               alert("删除成功，请刷新页面！");
+            }
+            else{
+                alert("无法删除！");
+            }
+
+
+        }
+
+        function edi(m) {
+            var form = new FormData();
+            form.append("targetid",m);
+            form.append("nid",{{ nid }});
+
+            var xh = new XMLHttpRequest();
+            xh.open("POST","", true);
+            xh.send(form);
+
+        }
+
+    </script>
+
+    <script type="text/javascript">
         var a = 0;
         var b = 0;
         var c = 0;
-        {#function add_goods(){#}
-        {#    a++;#}
-        {# document.getElementById().innerHTML = "点赞("+a+")";#}
-        {##}
-        {#}#}
-        function distribute(){
+
+        function distribute(m){
             b++;
-            document.getElementById("distribute").innerHTML ="转发("+ b+")";
+            document.getElementById("distribute"+m).innerHTML ="转发("+ b+")";
         }
-       var ck = function(){
+
+
+
+
+       var ck = function(qwe){
             c++;
             var x = prompt ("输入评论: ","");/*第一个变量为提示语，第二个变量为默认初始值*/
-            document.getElementById('issiue'+c).innerHTML= "{{ user.0.name }}"+":"+x;
+            document.getElementById('issiue'+qwe).innerHTML= "{{ user.0.name }}"+":"+x;
+
+            $.ajax
+            ({
+                type:"post",
+                url:"/database/",
+                dataType:"json",
+                data:{talkabout:x,user:{{ user }},id:{{ nid }},nameid:qwe},
+                success:function(){
+                    alert("评论成功！");
+                },
+               
+   
+                error:function(){
+                alert("评论失败");
+                },
+            });
+
         }
 
 
