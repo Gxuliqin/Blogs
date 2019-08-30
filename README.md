@@ -17,3 +17,7 @@ use mysql to create a databse named "S4DB65" admin"liqin" pwd"1234" on your loca
 #v1.0
 可以登录，注册，发布，评论
 --存在的bug:编辑，删除
+
+#1.3 
+可登陆注册，发布，评论，删除
+--待完善（转发，主页样式）
