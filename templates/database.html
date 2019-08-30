@@ -71,8 +71,8 @@
 {#          <button onclick="ck()">评论</button>#}
 
                 <input type="button" onclick="del({{ row.id }})" value="删除">
-                |
-                <input type="button" onclick="edi({{ row.id }})" value="编辑" />
+{#                |#}
+{#                <input type="button" onclick="edi({{ row.id }})" value="编辑" />#}
 
             <div id="talkarea">
 
@@ -109,7 +109,7 @@
             if (x !=null)
             {
                 document.getElementById('issiue' + qwe).innerHTML = "{{ user.0.name }}" + ":" + x;
-            };
+            }
             var _form = new FormData();
             _form.append("talkabout", x);
             _form.append("nameid", qwe);
@@ -123,10 +123,10 @@
             {#_form.append("nid", nid);#}
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/del_class/", true);
+            xhr.open("POST", "/talkabout/", true);
             xhr.send(_form);
             {#xhr.send(_form2);#}
-        }
+        };
 
         function del(m) {
             var form = new FormData();

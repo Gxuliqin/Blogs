@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'edit_class/', views.edit_class),
     url(r'students/', views.students),
     url(r'regist/', views.regist),
+    url(r'talkabout/', views.talkabout),
     url('', views.first),
 ]

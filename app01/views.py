@@ -225,3 +225,18 @@ def regist(requset):
             return render(requset, 'regist.html',{"err": "用户名或密码不能为空"})
     else:
         return render(requset, 'regist.html')
+
+
+def talkabout(request):
+    nameid = request.POST.get('nameid')
+    nid = request.POST.get('nid')
+    content = request.POST.get('talkabout')
+
+    if content!=None:
+        name = sqlheper.get_one("select name from user where id=%s",[nameid])
+        nname = sqlheper.get_one("select name from user where id=%s",[nid])
+        sqlheper.modify("insert into talkabout(name,nname,content1) values(%s,%s,%s)",[name['name'],nname['name'],content,])
+        print(name,nname,content)
+
+    return redirect('/database/?nid=%s', nid)
+
